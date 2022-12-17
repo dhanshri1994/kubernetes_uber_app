@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uber-ui
+spec:
+  selector:
+    matchLabels:
+      app: uber-ui
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: uber-ui
+    spec:
+      containers:
+      - name: uber-ui
+        image: 055157974306.dkr.ecr.us-east-1.amazonaws.com/devopsthehardway-ecr:latest
+        ports:
+        - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: uber-ui
+  annotations:
+    kubernetes.io/ingress.class: alb
+    
+spec:
+  type: LoadBalancer
+  selector:
+    app: uber-ui
+  ports:
+  - port: 6000
+    targetPort: 5000
+  
